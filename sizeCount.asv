@@ -1,17 +1,13 @@
 %%%%%% HÄR BÖRJAR JOEL KOD %%%%%%
-
-%%% Create BW Image %%%
-I = imread('coins.tif');    % read image 
-T = graythresh(I);          % find appropriate bw threshold T
+I = imread('coins.tif');    % read image
+T = graythresh(I);          % find appropriate bw threshold
 Ibw = im2bw(I,T);           % create bw image with threshold
-se=strel('disk',1,8);       % create a morph object se
-ibwer = imerode(Ibw,se);    % erode bw image with morph object se
-
-%%% dicretize %%%
+se=strel('disk',1,8);       % create a morph object
+ibwer = imerode(Ibw,se);    % erode bw image with morph object
 Idist=bwdist(ibwer,'euclidean');    % apply distance transform, euclidean type
-Imax = imextendedmax(Idist,1);      % find local maximas
+Imax = imextendedmax(Idist,1);
 
-%IW = watershed(Imax);
+IW = watershed(Imax);
 
 %imshow(mat2gray(Idist));
 figure;
