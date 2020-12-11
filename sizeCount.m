@@ -1,29 +1,35 @@
-%%%%%% HÄR BÖRJAR JOEL KOD %%%%%%
+%joel-----------------
+% coins = imread('coins.tif');
+% imshow(coins);
 
-%%% Create BW Image %%%
-I = imread('coins.tif');    % read image 
-T = graythresh(I);          % find appropriate bw threshold T
-Ibw = im2bw(I,T);           % create bw image with threshold
-se=strel('disk',1,8);       % create a morph object se
-ibwer = imerode(Ibw,se);    % erode bw image with morph object se
 
-%%% dicretize %%%
-Idist=bwdist(ibwer,'euclidean');    % apply distance transform, euclidean type
-Imax = imextendedmax(Idist,1);      % find local maximas
+%alex----------------
+clear all
+I = imread('coins.tif');
+imshow(I);
+T=graythresh(I);
+Ithresh=im2bw(I,T);
+imshow(Ithresh);
 
-%IW = watershed(Imax);
+Idist=bwdist(Ithresh,'euclidean');
+imshow(mat2gray(Idist));
+Iwater=watershed(Idist);
+imshow(Iwater);
+Iextended=imextendedmax(Idist,1);
+imshow(Iextended);
 
-%imshow(mat2gray(Idist));
-figure;
-imshow(I)
-%figure
-%imshow(ibwer)
-figure
-imshow(Imax)
-figure
-imshow(or(I,Imax))
-%imshow(IW)
+se=strel('disk',1,8);
+imbwer = imerode(Ithresh,se);
 
-% imshow(mat2gray(Idist));
+imshow(imbwer)
+Idist=-bwdist(imbwer);
+imshow(mat2gray(Idist));
+Iextended=imextendedmax(Idist,1);
+imshow(Iextended);
+Iwater=watershed(Idist);
+imshow(label2rgb(Iwater))
 
-%%%%%% HÄR BÖRJAR ALEX KOD %%%%%%
+bw2 = I;
+bw2(Iwater == 0) = 0;
+imshow(bw2)
+
