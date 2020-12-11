@@ -1,7 +1,7 @@
 %%%%%% HÄR BÖRJAR JOEL KOD %%%%%%
 
 %%% Create BW Image %%%
-Im = imread('coins.tif');    % read image 
+Im = imread('bacteria.tif');    % read image 
 
 % I = imgaussfilt(Im,5);
 % I = I./Im;
@@ -14,13 +14,15 @@ se=strel('disk',1,8);       % create a morph object se
 Ibwer = imerode(Ibw,se);    % erode bw image with morph object se
 
 % dicretize 
-Idist=bwdist(Ibwer,'euclidean');    % apply distance transform, euclidean type
+Idist=bwdist(Ibwer);    % apply distance transform
 Imax = -imextendedmax(Idist,4);      % find local maximas
 Iws = watershed(Imax);
 
 result = Im;
 result(Iws == 0) = 0;
 
+[~,N] = bwlabel(-Imax);
+[~, N2] = bwlabel(Iws);
 
 % figure
 % 
@@ -29,20 +31,27 @@ result(Iws == 0) = 0;
 % subplot(1,2,2)
 % imshow(I)
 
-figure
+% figure
 subplot(2,3,1)
 imshow(Im)
+xlabel('reference pic')
 subplot(2,3,2)
 imshow(Ibw)
+xlabel('black and white ref pic')
 subplot(2,3,3)
 imshow(Ibwer)
+xlabel('removed noised')
+
 
 subplot(2,3,4)
 imshow(Idist)
+xlabel('removed noised inverted')
 subplot(2,3,5)
 imshow(-Imax)
+xlabel('local minima')
 subplot(2,3,6)
 imshow(result)
+xlabel('watershed on picture with local minima')
 
 
 
