@@ -4,51 +4,48 @@ close all;
 %%%%%% HÄR BÖRJAR JOEL KOD %%%%%%
 
 %%% Create BW Image %%%
-I = imread('bacteria.tif');    % read image 
+I = imread('coins.tif');    % read image 
 
 T1 = graythresh(I);   	% find appropriate bw threshold T
-Ibw1 = 1-im2bw(I,T1);     % create bw image with threshold
-Ibw2 = imfill(Ibw1, 'holes');
+Ibw = uint8(im2bw(I,T1));      % create bw image with threshold
+Ibw = imfill(Ibw, 'holes');
+%Ibwg= imgaussfilt(Ibw,4); % gaussian blur
+%Ig =  imgradient(Ibw);
+%Igg =  imgradient(Ig);
+%Ibw = imfill(Ibw1, 'holes');
 
 
 
-%se=strel('disk',40);  % create a morph object se
-%Iop = imopen(I,se);    % opem image I with morph object se
+se=strel('disk',1);  % create a morph object se
+Ier = imerode(Ibw,se);    % opem image I with morph object se
 % 
 % Idiff = Iop-I;          % image minus opened image 
 % T2 = graythresh(Idiff); % find appropriate bw threshold T
 % Ibw2 = im2bw(Idiff,T2);
 
 % dicretize 
-Idist= bwdist(1.-Ibw2,'euclidean');    % apply distance transform, euclidean type
-Imax = imextendedmax(Idist,10);      % find local maximas
-Iws = watershed(-Imax);
-
-
-[Ilabel, N]=bwlabel(Ibw2);
+% Idist= bwdist(1.-Ibw1,'euclidean');    % apply distance transform, euclidean type
+% Imax = imextendedmax(Idist,4);      % find local maximas
+% Iws = watershed(-Imax);
+% 
+% [Ilabel, N]=bwlabel(Ibw1);
 % F=regionprops(Ilabel, 'area');
 % area = [F.Area];
 % radius = round((pi^(-1).*area).^(0.5));
 % hist(radius);
+% 
+% result = I;
+% result(Iws == 0) = 0;
+imagesc(Ig)
 
 
-result = Ibw2;
-result(Iws == 0) = 0;
-
-
-figure
+% figure
 % subplot(2,3,1)
 % imshow(I)
 % subplot(2,3,2)
 % imshow(Ibw1)
 % subplot(2,3,3)
 % imshow(Ibw2)
-% subplot(2,3,4)
-% imagesc(Idist)
-% subplot(2,3,5)
-% imshow(Imax)
-% subplot(2,3,6)
-imshow(result)
 
 
 %%%%%% HÄR BÖRJAR ALEX KOD %%%%%%
