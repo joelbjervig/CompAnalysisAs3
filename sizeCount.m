@@ -1,23 +1,51 @@
 %%%%%% HÄR BÖRJAR JOEL KOD %%%%%%
 
 %%% Create BW Image %%%
-I = imread('coins.tif');    % read image 
+Im = imread('coins.tif');    % read image 
+
+% I = imgaussfilt(Im,5);
+% I = I./Im;
+I=Im;
+
+%%% for blurred image
 T = graythresh(I);          % find appropriate bw threshold T
 Ibw = im2bw(I,T);           % create bw image with threshold
 se=strel('disk',1,8);       % create a morph object se
-ibwer = imerode(Ibw,se);    % erode bw image with morph object se
+Ibwer = imerode(Ibw,se);    % erode bw image with morph object se
 
-%%% dicretize %%%
-Idist=bwdist(ibwer,'euclidean');    % apply distance transform, euclidean type
-Imax = -imextendedmax(Idist,5);      % find local maximas
+% dicretize 
+Idist=bwdist(Ibwer,'euclidean');    % apply distance transform, euclidean type
+Imax = -imextendedmax(Idist,4);      % find local maximas
 Iws = watershed(Imax);
 
-result = I;
+result = Im;
 result(Iws == 0) = 0;
-imshow(result)
+
 
 % figure
-% imshow(Imax)
+% 
+% subplot(1,2,1)
+% imshow(Im)
+% subplot(1,2,2)
+% imshow(I)
+
+figure
+subplot(2,3,1)
+imshow(Im)
+subplot(2,3,2)
+imshow(Ibw)
+subplot(2,3,3)
+imshow(Ibwer)
+
+subplot(2,3,4)
+imshow(Idist)
+subplot(2,3,5)
+imshow(-Imax)
+subplot(2,3,6)
+imshow(result)
+
+
+
 % figure
 % imshow(uint8((double(Iws)+double(I))))
 % figure
