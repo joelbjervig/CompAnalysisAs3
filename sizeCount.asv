@@ -22,14 +22,11 @@ se=strel('disk',1,8);
 imbwer = imerode(Ithresh,se);
 
 imshow(imbwer)
-Idist=-bwdist(imbwer);
+Idist=-bwdist(imbwer,'euclidean');
 imshow(mat2gray(Idist));
 Iextended=imextendedmax(Idist,1);
 imshow(Iextended);
-Iwater=watershed(Idist);
-imshow(label2rgb(Iwater))
+Iwater=watershed(Idists);
+imshow(Iwater);
 
-bw2 = I;
-bw2(Iwater == 0) = 0;
-imshow(bw2)
 
