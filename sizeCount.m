@@ -1,8 +1,8 @@
 %%%%%% HÄR BÖRJAR JOEL KOD %%%%%%
 
 %%% Create BW Image %%%
-Im = imread('bacteria.tif');    % read image 
-
+Im = imread('coins.tif');    % read image 
+% Im = imread('bacteria.tif');
 % I = imgaussfilt(Im,5);
 % I = I./Im;
 I=Im;
@@ -18,11 +18,27 @@ Idist=bwdist(Ibwer);    % apply distance transform
 Imax = -imextendedmax(Idist,4);      % find local maximas
 Iws = watershed(Imax);
 
+
 result = Im;
 result(Iws == 0) = 0;
 
+figure
+Ibwer=imcomplement(Ibwer);
+Ibwer(Iws==0)=0;
+imshow(Ibwer)
+
 [~,N] = bwlabel(-Imax);
 [~, N2] = bwlabel(Iws);
+
+Ilabel=bwlabel(Ibwer);
+imshow(label2rgb(Ilabel, 'spring'))
+
+keeperIndexes = find(allowableAreaIndexes);
+keeperBlobsImage = ismember(Ilabel, keeperIndexes);
+imshow(label2rgb(keeperBlobsImage, 'spring'))
+F=regionprops(keeperBlobsImage,'Area');
+area=[F.Area];
+histogram(area)
 
 % figure
 % 
@@ -44,7 +60,7 @@ xlabel('removed noised')
 
 
 subplot(2,3,4)
-imshow(Idist)
+imshow (Idist)
 xlabel('removed noised inverted')
 subplot(2,3,5)
 imshow(-Imax)
