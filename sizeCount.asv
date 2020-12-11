@@ -1,8 +1,8 @@
 %%%%%% HÄR BÖRJAR JOEL KOD %%%%%%
 
 %%% Create BW Image %%%
-Im = imread('bacteria.tif');    % read image 
-
+Im = imread('coins.tif');    % read image 
+% Im = imread('bacteria.tif');
 % I = imgaussfilt(Im,5);
 % I = I./Im;
 I=Im;
@@ -21,19 +21,31 @@ Iws = watershed(Imax);
 
 result = Im;
 result(Iws == 0) = 0;
-% 
-% [~,N] = bwlabel(-Imax);
-% [~, N2] = bwlabel(Iws);
-Ilabel=bwlabel(Idist)
-F=regionprops(Ilabel, 'Area');
-A=[F.Area]
-histogram(A,10)
-% figure
-% 
-% subplot(1,2,1)
-% imshow(Im)
-% subplot(1,2,2)
-% imshow(I)
+
+figure
+Ibwer=imcomplement(Ibwer);
+Ibwer(Iws==0)=0;
+imshow(Ibwer)
+
+[~,N] = bwlabel(-Imax);
+[~, N2] = bwlabel(Iws);
+
+Ilabel=bwlabel(Ibwer);
+imshow(label2rgb(Ilabel, 'spring'))
+
+F= regionprops(llabel);
+allBlobArea=[F.Area];
+allowableAreaIndexes = allBlobAreas > 500;
+keeperIndexes = find(allowableAreaIndexes);
+keeperBlobsImage = ismember(Ilabel, keeperIndexes);
+imshow(label2rgb(keeperBlobsImage, 'spring'))
+F=regionprops(keeperBlobsImage,'Area');
+allBlobArea=[F.Area];
+subplot(1,2,1)
+histogram(allBlobArea)
+subplot(1,2,2)
+imshow(keeperBlobsImage)
+
 
 % figure
 subplot(2,3,1)
@@ -48,7 +60,7 @@ xlabel('removed noised')
 
 
 subplot(2,3,4)
-imshow(Idist)
+imshow (Idist)
 xlabel('removed noised inverted')
 subplot(2,3,5)
 imshow(-Imax)

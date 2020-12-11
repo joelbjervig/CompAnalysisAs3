@@ -30,22 +30,23 @@ imshow(Ibwer)
 [~,N] = bwlabel(-Imax);
 [~, N2] = bwlabel(Iws);
 
+figure
 Ilabel=bwlabel(Ibwer);
 imshow(label2rgb(Ilabel, 'spring'))
 
+F= regionprops(Ilabel);
+allBlobArea=[F.Area];
+allowableAreaIndexes = allBlobArea > 500;
 keeperIndexes = find(allowableAreaIndexes);
 keeperBlobsImage = ismember(Ilabel, keeperIndexes);
 imshow(label2rgb(keeperBlobsImage, 'spring'))
 F=regionprops(keeperBlobsImage,'Area');
-area=[F.Area];
-histogram(area)
+allBlobArea=[F.Area];
+subplot(1,2,1)
+histogram(allBlobArea)
+subplot(1,2,2)
+imshow(keeperBlobsImage)
 
-% figure
-% 
-% subplot(1,2,1)
-% imshow(Im)
-% subplot(1,2,2)
-% imshow(I)
 
 % figure
 subplot(2,3,1)
