@@ -8,17 +8,18 @@ se=strel('disk',1,8);       % create a morph object se
 ibwer = imerode(Ibw,se);    % erode bw image with morph object se
 
 %%% dicretize %%%
-Idist=-bwdist(ibwer,'euclidean');    % apply distance transform, euclidean type
-Imax = imextendedmax(Idist,1);      % find local maximas
-Iws = watershed(Idist);
+Idist=bwdist(ibwer,'euclidean');    % apply distance transform, euclidean type
+Imax = -imextendedmax(Idist,5);      % find local maximas
+Iws = watershed(Imax);
 
-figure
-imshow(mat2gray(Idist));
-figure;
-imshow(label2rgb(Iws));
-figure
-imshow(uint8((double(Iws) + double(I))))
-%imshow(ibwer)
+result = I;
+result(Iws == 0) = 0;
+imshow(result)
+
+% figure
+% imshow(Imax)
+% figure
+% imshow(uint8((double(Iws)+double(I))))
 % figure
 % imshow(Imax)
 % figure
