@@ -40,7 +40,7 @@ keepCoins = ismember(Ilabel, indexes);
 F=regionprops(keepCoins,'Area');
 area=[F.Area];
 
-%histplots
+%plots
 figure
 subplot(1,2,1)
 histogram(area)
@@ -49,7 +49,7 @@ subplot(1,2,2)
 imshow(keepCoins)
 xlabel('showing bw segmentation')
 
-%pre processing plots
+
 figure
 subplot(2,3,1)
 imshow(Im)
@@ -60,6 +60,8 @@ xlabel('black and white ref pic')
 subplot(2,3,3)
 imshow(Ibwer)
 xlabel('removed noised')
+
+
 subplot(2,3,4)
 imshow (Idist)
 xlabel('removed noised inverted')
@@ -67,7 +69,6 @@ subplot(2,3,5)
 imshow(-Imax)
 xlabel('local minima')
 
-%final segmentationplot
 figure
 imshow(result)
 xlabel('watershed on picture with local minima')
